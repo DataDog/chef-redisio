@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Recipe:: default
 #
 # Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
@@ -29,12 +29,12 @@ if platform?('debian', 'ubuntu')
   end
 end
 
-unless node['redisio']['package_install']
-  include_recipe 'dd-redisio::_install_prereqs'
+unless node['ddredisio']['package_install']
+  include_recipe 'ddredisio::_install_prereqs'
   include_recipe 'build-essential::default'
 end
 
-unless node['redisio']['bypass_setup']
-  include_recipe 'dd-redisio::install'
-  include_recipe 'dd-redisio::configure'
+unless node['ddredisio']['bypass_setup']
+  include_recipe 'ddredisio::install'
+  include_recipe 'ddredisio::configure'
 end

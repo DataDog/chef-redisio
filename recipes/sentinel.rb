@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Recipe:: sentinel
 #
 # Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
@@ -17,11 +17,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-include_recipe 'dd-redisio::_install_prereqs'
-include_recipe 'dd-redisio::install'
+include_recipe 'ddredisio::_install_prereqs'
+include_recipe 'ddredisio::install'
 include_recipe 'ulimit::default'
 
-redis = node['redisio']
+redis = node['ddredisio']
 
 sentinel_instances = redis['sentinels']
 if sentinel_instances.nil?
@@ -40,17 +40,17 @@ if sentinel_instances.nil?
   ]
 end
 
-redisio_sentinel 'redis-sentinels' do
+ddredisio_sentinel 'redis-sentinels' do
   version redis['version'] if redis['version']
   sentinel_defaults redis['sentinel_defaults']
   sentinels sentinel_instances
   base_piddir redis['base_piddir']
 end
 
-bin_path = if node['redisio']['install_dir']
-             ::File.join(node['redisio']['install_dir'], 'bin')
+bin_path = if node['ddredisio']['install_dir']
+             ::File.join(node['ddredisio']['install_dir'], 'bin')
            else
-             node['redisio']['bin_path']
+             node['ddredisio']['bin_path']
            end
 
 template '/lib/systemd/system/redis-sentinel@.service' do
@@ -59,14 +59,14 @@ template '/lib/systemd/system/redis-sentinel@.service' do
     bin_path: bin_path,
     limit_nofile: redis['default_settings']['maxclients'] + 32
   )
-  only_if { node['redisio']['job_control'] == 'systemd' }
+  only_if { node['ddredisio']['job_control'] == 'systemd' }
 end
 
 # Create a service resource for each sentinel instance, named for the port it runs on.
 sentinel_instances.each do |current_sentinel|
   sentinel_name = current_sentinel['name']
 
-  case node['redisio']['job_control']
+  case node['ddredisio']['job_control']
   when 'initd'
     service "redis_sentinel_#{sentinel_name}" do
       # don't supply start/stop/restart commands, Chef::Provider::Service::*

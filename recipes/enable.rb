@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Recipe:: enable
 #
 # Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
@@ -18,11 +18,11 @@
 # limitations under the License.
 #
 
-redis = node['redisio']
+redis = node['ddredisio']
 
 redis['servers'].each do |current_server|
   server_name = current_server['name'] || current_server['port']
-  resource_name = if node['redisio']['job_control'] == 'systemd'
+  resource_name = if node['ddredisio']['job_control'] == 'systemd'
                     "service[redis@#{server_name}]"
                   else
                     "service[redis#{server_name}]"

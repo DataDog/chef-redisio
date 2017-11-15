@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Recipe:: redis_gem
 #
 # Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-gem_package node['redisio']['gem']['name'] do
-  version node['redisio']['gem']['version'] unless node['redisio']['gem']['version'].nil?
+gem_package node['ddredisio']['gem']['name'] do
+  version node['ddredisio']['gem']['version'] unless node['ddredisio']['gem']['version'].nil?
   action :install
 end

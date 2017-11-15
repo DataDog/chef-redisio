@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Provider::sentinel
 #
 # Copyright 2013, Rackspace Hosting <ryan.cleere@rackspace.com>
@@ -31,7 +31,7 @@ def configure
                       new_resource.version
                     end
 
-  version_hash = RedisioHelper.version_to_hash(current_version)
+  version_hash = DDRedisioHelper.version_to_hash(current_version)
 
   # Setup a configuration file and init script for each configuration provided
   new_resource.sentinels.each do |current_instance|
@@ -157,7 +157,7 @@ def configure
       # Lay down the configuration files for the current instance
       template "#{current['configdir']}/#{sentinel_name}.conf" do
         source 'sentinel.conf.erb'
-        cookbook 'redisio'
+        cookbook 'ddredisio'
         owner current['user']
         group current['group']
         mode '0644'
@@ -166,7 +166,7 @@ def configure
           name:                   current['name'],
           piddir:                 piddir,
           version:                version_hash,
-          job_control:            node['redisio']['job_control'],
+          job_control:            node['ddredisio']['job_control'],
           sentinel_bind:          current['sentinel_bind'],
           sentinel_port:          current['sentinel_port'],
           loglevel:               current['loglevel'],
@@ -188,14 +188,14 @@ def configure
       end
 
       # Setup init.d file
-      bin_path = if node['redisio']['install_dir']
-                   ::File.join(node['redisio']['install_dir'], 'bin')
+      bin_path = if node['ddredisio']['install_dir']
+                   ::File.join(node['ddredisio']['install_dir'], 'bin')
                  else
-                   node['redisio']['bin_path']
+                   node['ddredisio']['bin_path']
                  end
       template "/etc/init.d/redis_#{sentinel_name}" do
         source 'sentinel.init.erb'
-        cookbook 'redisio'
+        cookbook 'ddredisio'
         owner 'root'
         group 'root'
         mode '0755'
@@ -207,12 +207,12 @@ def configure
           piddir: piddir,
           platform: node['platform']
         )
-        only_if { node['redisio']['job_control'] == 'initd' }
+        only_if { node['ddredisio']['job_control'] == 'initd' }
       end
 
       template "/etc/init/redis_#{sentinel_name}.conf" do
         source 'sentinel.upstart.conf.erb'
-        cookbook 'redisio'
+        cookbook 'ddredisio'
         owner current['user']
         group current['group']
         mode '0644'
@@ -224,12 +224,12 @@ def configure
           configdir: current['configdir'],
           piddir: piddir
         )
-        only_if { node['redisio']['job_control'] == 'upstart' }
+        only_if { node['ddredisio']['job_control'] == 'upstart' }
       end
       # TODO: fix for freebsd
       template "/usr/local/etc/rc.d/redis_#{sentinel_name}" do
         source 'sentinel.rcinit.erb'
-        cookbook 'redisio'
+        cookbook 'ddredisio'
         owner current['user']
         group current['group']
         mode '0755'
@@ -240,17 +240,17 @@ def configure
           configdir: current['configdir'],
           piddir: piddir
         )
-        only_if { node['redisio']['job_control'] == 'rcinit' }
+        only_if { node['ddredisio']['job_control'] == 'rcinit' }
       end
     end
   end # servers each loop
 end
 
 def redis_exists?
-  bin_path = if node['redisio']['install_dir']
-               ::File.join(node['redisio']['install_dir'], 'bin')
+  bin_path = if node['ddredisio']['install_dir']
+               ::File.join(node['ddredisio']['install_dir'], 'bin')
              else
-               node['redisio']['bin_path']
+               node['ddredisio']['bin_path']
              end
   redis_server = ::File.join(bin_path, 'redis-server')
   ::File.exist?(redis_server)
@@ -258,10 +258,10 @@ end
 
 def version
   if redis_exists?
-    bin_path = if node['redisio']['install_dir']
-                 ::File.join(node['redisio']['install_dir'], 'bin')
+    bin_path = if node['ddredisio']['install_dir']
+                 ::File.join(node['ddredisio']['install_dir'], 'bin')
                else
-                 node['redisio']['bin_path']
+                 node['ddredisio']['bin_path']
                end
     redis_server = ::File.join(bin_path, 'redis-server')
     redis_version = Mixlib::ShellOut.new("#{redis_server} -v")
@@ -274,7 +274,7 @@ def version
 end
 
 def load_current_resource
-  @current_resource = Chef::Resource.resource_for_node(:redisio_sentinel, node).new(new_resource.name)
+  @current_resource = Chef::Resource.resource_for_node(:ddredisio_sentinel, node).new(new_resource.name)
   @current_resource.version(version)
   @current_resource
 end

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Attribute::redis_gem
 #
 # Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
@@ -18,5 +18,5 @@
 #
 
 # Allow for a redis ruby gem to be installed
-default['redisio']['gem']['name'] = 'redis'
-default['redisio']['gem']['version'] = nil
+default['ddredisio']['gem']['name'] = 'redis'
+default['ddredisio']['gem']['version'] = nil

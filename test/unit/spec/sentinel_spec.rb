@@ -9,13 +9,13 @@ describe 'sentinel recipes' do
     enable
     sentinel
     sentinel_enable
-  ).map { |r| "dd-redisio::#{r}" }
+  ).map { |r| "ddredisio::#{r}" }
 
   # pick an arbitrary OS; just for fauxhai to provide some values
   it 'creates a default sentinel instance' do
     # *splat operator for array to vararg
     chef_run = ChefSpec::SoloRunner.new.converge(*recipes)
-    expect(chef_run).to run_redisio_sentinel('redis-sentinels').with(
+    expect(chef_run).to run_ddredisio_sentinel('redis-sentinels').with(
       sentinels: [
         {
           'sentinel_port' => '26379',
@@ -34,7 +34,7 @@ describe 'sentinel recipes' do
 
   it 'creates a specified sentinel instance' do
     chef_run = ChefSpec::SoloRunner.new do |node|
-      node.override['redisio']['sentinels'] = [
+      node.override['ddredisio']['sentinels'] = [
         {
           'sentinel_bind' => '0.0.0.0',
           'sentinel_port' => '1234',
@@ -44,7 +44,7 @@ describe 'sentinel recipes' do
         }
       ]
     end.converge(*recipes) # *splat operator for array to vararg
-    expect(chef_run).to run_redisio_sentinel('redis-sentinels').with(
+    expect(chef_run).to run_ddredisio_sentinel('redis-sentinels').with(
       sentinels: [
         {
           'sentinel_bind' => '0.0.0.0',
@@ -59,9 +59,9 @@ describe 'sentinel recipes' do
 
   it 'should not create a sentinel instance' do
     chef_run = ChefSpec::SoloRunner.new do |node|
-      node.override['redisio']['sentinels'] = []
+      node.override['ddredisio']['sentinels'] = []
     end.converge(*recipes) # *splat operator for array to vararg
-    expect(chef_run).to run_redisio_sentinel('redis-sentinels').with(
+    expect(chef_run).to run_ddredisio_sentinel('redis-sentinels').with(
       sentinels: []
     )
   end

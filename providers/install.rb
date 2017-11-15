@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Provider::install
 #
 # Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
@@ -19,10 +19,10 @@
 
 action :run do
   # Package install
-  if node['redisio']['package_install']
-    package_resource = package 'redisio_package_name' do
-      package_name node['redisio']['package_name']
-      version node['redisio']['version']
+  if node['ddredisio']['package_install']
+    package_resource = package 'ddredisio_package_name' do
+      package_name node['ddredisio']['package_name']
+      version node['ddredisio']['version']
       action :nothing
     end
 
@@ -79,10 +79,10 @@ def install
 end
 
 def redis_exists?
-  bin_path = if node['redisio']['install_dir']
-               ::File.join(node['redisio']['install_dir'], 'bin')
+  bin_path = if node['ddredisio']['install_dir']
+               ::File.join(node['ddredisio']['install_dir'], 'bin')
              else
-               node['redisio']['bin_path']
+               node['ddredisio']['bin_path']
              end
   redis_server = ::File.join(bin_path, 'redis-server')
   ::File.exist?(redis_server)
@@ -90,10 +90,10 @@ end
 
 def version
   if redis_exists?
-    bin_path = if node['redisio']['install_dir']
-                 ::File.join(node['redisio']['install_dir'], 'bin')
+    bin_path = if node['ddredisio']['install_dir']
+                 ::File.join(node['ddredisio']['install_dir'], 'bin')
                else
-                 node['redisio']['bin_path']
+                 node['ddredisio']['bin_path']
                end
     redis_server = ::File.join(bin_path, 'redis-server')
     redis_version = Mixlib::ShellOut.new("#{redis_server} -v")
@@ -106,7 +106,7 @@ def version
 end
 
 def load_current_resource
-  @current_resource = Chef::Resource.resource_for_node(:redisio_install, node).new(new_resource.name)
+  @current_resource = Chef::Resource.resource_for_node(:ddredisio_install, node).new(new_resource.name)
   @current_resource.version(version)
   @current_resource
 end

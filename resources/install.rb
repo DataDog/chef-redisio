@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Resource::install
 #
 # Copyright 2013, Brian Bianco <brian.bianco@gmail.com>

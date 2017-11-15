@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Recipe:: sentinel_enable
 #
 # Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-sentinel_instances = node['redisio']['sentinels']
+sentinel_instances = node['ddredisio']['sentinels']
 
 if sentinel_instances.nil?
   sentinel_instances = [
@@ -33,13 +33,13 @@ end
 
 execute 'reload-systemd-sentinel' do
   command 'systemctl daemon-reload'
-  only_if { node['redisio']['job_control'] == 'systemd' }
+  only_if { node['ddredisio']['job_control'] == 'systemd' }
   action :nothing
 end
 
 sentinel_instances.each do |current_sentinel|
   sentinel_name = current_sentinel['name']
-  resource_name = if node['redisio']['job_control'] == 'systemd'
+  resource_name = if node['ddredisio']['job_control'] == 'systemd'
                     "service[redis-sentinel@#{sentinel_name}]"
                   else
                     "service[redis_sentinel_#{sentinel_name}]"
@@ -47,7 +47,7 @@ sentinel_instances.each do |current_sentinel|
   resource = resources(resource_name)
   resource.action Array(resource.action)
   resource.action << :start
-  if node['redisio']['job_control'] != 'systemd'
+  if node['ddredisio']['job_control'] != 'systemd'
     resource.action << :enable
   else
     link "/etc/systemd/system/multi-user.target.wants/redis-sentinel@#{sentinel_name}.service" do

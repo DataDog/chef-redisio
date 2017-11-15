@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Provider::configure
 #
 # Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
@@ -29,14 +29,14 @@ def configure
   base_piddir = new_resource.base_piddir
 
   if !new_resource.version
-    redis_output = Mixlib::ShellOut.new("#{node['redisio']['bin_path']}/redis-server -v")
+    redis_output = Mixlib::ShellOut.new("#{node['ddredisio']['bin_path']}/redis-server -v")
     redis_output.run_command
     redis_output.error!
     current_version = redis_output.stdout.gsub(/.*v=((\d+\.){2}\d+).*/, '\1').chomp
   else
     current_version = new_resource.version
   end
-  version_hash = RedisioHelper.version_to_hash(current_version)
+  version_hash = DDRedisioHelper.version_to_hash(current_version)
 
   # Setup a configuration file and init script for each configuration provided
   new_resource.servers.each do |current_instance|
@@ -207,7 +207,7 @@ def configure
       if current['save'] && current['save'].respond_to?(:each_line)
         computed_save = current['save'].each_line
         Chef::Log.warn("#{server_name}: given a save argument as a string, instead of an array.")
-        Chef::Log.warn("#{server_name}: This will be deprecated in future versions of the redisio cookbook.")
+        Chef::Log.warn("#{server_name}: This will be deprecated in future versions of the ddredisio cookbook.")
       end
 
       # Load password for use with requirepass from data bag if needed
@@ -219,8 +219,8 @@ def configure
 
       # Lay down the configuration files for the current instance
       template "#{current['configdir']}/#{server_name}.conf" do
-        source node['redisio']['redis_config']['template_source']
-        cookbook node['redisio']['redis_config']['template_cookbook']
+        source node['ddredisio']['redis_config']['template_source']
+        cookbook node['ddredisio']['redis_config']['template_cookbook']
         owner current['user']
         group current['group']
         mode '0644'
@@ -229,7 +229,7 @@ def configure
           version:                    version_hash,
           piddir:                     piddir,
           name:                       server_name,
-          job_control:                node['redisio']['job_control'],
+          job_control:                node['ddredisio']['job_control'],
           port:                       current['port'],
           tcpbacklog:                 current['tcpbacklog'],
           address:                    current['address'],
@@ -307,17 +307,17 @@ def configure
       end
 
       # Setup init.d file
-      bin_path = if node['redisio']['install_dir']
-                   ::File.join(node['redisio']['install_dir'], 'bin')
+      bin_path = if node['ddredisio']['install_dir']
+                   ::File.join(node['ddredisio']['install_dir'], 'bin')
                  else
-                   node['redisio']['bin_path']
+                   node['ddredisio']['bin_path']
                  end
 
-      case node['redisio']['job_control']
+      case node['ddredisio']['job_control']
       when 'initd'
         template "/etc/init.d/redis#{server_name}" do
           source 'redis.init.erb'
-          cookbook 'redisio'
+          cookbook 'ddredisio'
           owner 'root'
           group 'root'
           mode '0755'
@@ -334,14 +334,14 @@ def configure
             platform: node['platform'],
             unixsocket: current['unixsocket'],
             ulimit: descriptors,
-            required_start: node['redisio']['init.d']['required_start'].join(' '),
-            required_stop: node['redisio']['init.d']['required_stop'].join(' ')
+            required_start: node['ddredisio']['init.d']['required_start'].join(' '),
+            required_stop: node['ddredisio']['init.d']['required_stop'].join(' ')
           )
         end
       when 'upstart'
         template "/etc/init/redis#{server_name}.conf" do
           source 'redis.upstart.conf.erb'
-          cookbook 'redisio'
+          cookbook 'ddredisio'
           owner current['user']
           group current['group']
           mode '0644'
@@ -358,7 +358,7 @@ def configure
       when 'rcinit'
         template "/usr/local/etc/rc.d/redis#{server_name}" do
           source 'redis.rcinit.erb'
-          cookbook 'redisio'
+          cookbook 'ddredisio'
           owner current['user']
           group current['group']
           mode '0755'
@@ -388,7 +388,7 @@ def configure
 
         template "/lib/systemd/system/#{service_name}.service" do
           source 'redis@.service.erb'
-          cookbook 'redisio'
+          cookbook 'ddredisio'
           owner 'root'
           group 'root'
           mode '0644'
@@ -406,6 +406,6 @@ def configure
 end
 
 def load_current_resource
-  @current_resource = Chef::Resource.resource_for_node(:redisio_configure, node).new(new_resource.name)
+  @current_resource = Chef::Resource.resource_for_node(:ddredisio_configure, node).new(new_resource.name)
   @current_resource
 end

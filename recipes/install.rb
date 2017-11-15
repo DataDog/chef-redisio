@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Recipe:: install
 #
 # Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
@@ -16,20 +16,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-if node['redisio']['package_install']
-  package 'redisio_package_name' do
-    package_name node['redisio']['package_name']
-    version node['redisio']['version'] if node['redisio']['version']
+if node['ddredisio']['package_install']
+  package 'ddredisio_package_name' do
+    package_name node['ddredisio']['package_name']
+    version node['ddredisio']['version'] if node['ddredisio']['version']
     action :install
   end
 else
-  include_recipe 'dd-redisio::_install_prereqs'
+  include_recipe 'ddredisio::_install_prereqs'
   include_recipe 'build-essential::default'
 
-  redis = node['redisio']
+  redis = node['ddredisio']
   location = "#{redis['mirror']}/#{redis['base_name']}#{redis['version']}.#{redis['artifact_type']}"
 
-  redisio_install 'redis-installation' do
+  ddredisio_install 'redis-installation' do
     version redis['version'] if redis['version']
     download_url location
     safe_install redis['safe_install']

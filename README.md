@@ -86,7 +86,7 @@ Redis-sentinel will write configuration and state data back into its configurati
 ```ruby
 run_list *%w[
   recipe[redisio]
-  recipe[dd-redisio::enable]
+  recipe[ddredisio::enable]
 ]
 
 default_attributes({})
@@ -97,7 +97,7 @@ default_attributes({})
 ```ruby
 run_list *%w[
   recipe[redisio]
-  recipe[dd-redisio::enable]
+  recipe[ddredisio::enable]
 ]
 
 default_attributes({
@@ -113,7 +113,7 @@ default_attributes({
 ```ruby
 run_list *%w[
   recipe[redisio]
-  recipe[dd-redisio::enable]
+  recipe[ddredisio::enable]
 ]
 
 default_attributes({
@@ -130,7 +130,7 @@ default_attributes({
 ```ruby
 run_list *%w[
   recipe[redisio]
-  recipe[dd-redisio::enable]
+  recipe[ddredisio::enable]
 ]
 
 default_attributes({
@@ -155,8 +155,8 @@ default_attributes({
 
 ```ruby
 run_list *%w[
-  recipe[dd-redisio]
-  recipe[dd-redisio-redisio::enable]
+  recipe[ddredisio]
+  recipe[ddredisio-redisio::enable]
 ]
 
 default_attributes({
@@ -174,7 +174,7 @@ default_attributes({
 ```ruby
 run_list *%w[
   recipe[redisio]
-  recipe[dd-redisio::enable]
+  recipe[ddredisio::enable]
 ]
 
 default_attributes({
@@ -190,7 +190,7 @@ default_attributes({
 ```ruby
 run_list *%w[
   recipe[redisio]
-  recipe[dd-redisio::enable]
+  recipe[ddredisio::enable]
 ]
 
 default_attributes({
@@ -210,7 +210,7 @@ default_attributes({
 ```ruby
 run_list *%w[
   recipe[redisio]
-  recipe[dd-redisio::enable]
+  recipe[ddredisio::enable]
 ]
 
 default_attributes({
@@ -225,8 +225,8 @@ default_attributes({
 
 ```ruby
 run_list *%w[
-  recipe[dd-redisio::sentinel]
-  recipe[dd-redisio::sentinel_enable]
+  recipe[ddredisio::sentinel]
+  recipe[ddredisio::sentinel_enable]
 ]
 ```
 
@@ -235,7 +235,7 @@ run_list *%w[
 ```ruby
 run_list *%w[
   recipe[redisio]
-  recipe[dd-redisio::enable]
+  recipe[ddredisio::enable]
 ]
 
 default_attributes({

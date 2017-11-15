@@ -1,4 +1,4 @@
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Attribute::default
 #
 # Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
@@ -43,23 +43,23 @@ else
 end
 
 # Overwite template used for the Redis Server config (not sentinel)
-default['redisio']['redis_config']['template_cookbook'] = 'redisio'
-default['redisio']['redis_config']['template_source'] = 'redis.conf.erb'
+default['ddredisio']['redis_config']['template_cookbook'] = 'ddredisio'
+default['ddredisio']['redis_config']['template_source'] = 'redis.conf.erb'
 
 # Install related attributes
-default['redisio']['safe_install'] = true
-default['redisio']['package_install'] = default_package_install
-default['redisio']['package_name'] =  package_name
-default['redisio']['bypass_setup'] = false
+default['ddredisio']['safe_install'] = true
+default['ddredisio']['package_install'] = default_package_install
+default['ddredisio']['package_name'] =  package_name
+default['ddredisio']['bypass_setup'] = false
 
 # Tarball and download related defaults
-default['redisio']['mirror'] = 'http://download.redis.io/releases/'
-default['redisio']['base_name'] = 'redis-'
-default['redisio']['artifact_type'] = 'tar.gz'
-default['redisio']['base_piddir'] = '/var/run/redis'
+default['ddredisio']['mirror'] = 'http://download.redis.io/releases/'
+default['ddredisio']['base_name'] = 'redis-'
+default['ddredisio']['artifact_type'] = 'tar.gz'
+default['ddredisio']['base_piddir'] = '/var/run/redis'
 
 # Version
-default['redisio']['version'] = if node['redisio']['package_install']
+default['ddredisio']['version'] = if node['ddredisio']['package_install']
                                   # latest version (only for package install)
                                   nil
                                 else
@@ -68,10 +68,10 @@ default['redisio']['version'] = if node['redisio']['package_install']
                                 end
 
 # Custom installation directory
-default['redisio']['install_dir'] = nil
+default['ddredisio']['install_dir'] = nil
 
 # Job control related options (initd, upstart, or systemd)
-default['redisio']['job_control'] = if node['init_package'] == 'systemd'
+default['ddredisio']['job_control'] = if node['init_package'] == 'systemd'
                                       'systemd'
                                     elsif node['platform_family'] == 'freebsd'
                                       'rcinit'
@@ -80,11 +80,11 @@ default['redisio']['job_control'] = if node['init_package'] == 'systemd'
                                     end
 
 # Init.d script related options
-default['redisio']['init.d']['required_start'] = []
-default['redisio']['init.d']['required_stop'] = []
+default['ddredisio']['init.d']['required_start'] = []
+default['ddredisio']['init.d']['required_stop'] = []
 
 # Default settings for all redis instances, these can be overridden on a per server basis in the 'servers' hash
-default['redisio']['default_settings'] = {
+default['ddredisio']['default_settings'] = {
   'user'                    => 'redis',
   'group'                   => 'redis',
   'homedir'                 => homedir,
@@ -171,10 +171,10 @@ default['redisio']['default_settings'] = {
 }
 
 # The default for this is set inside of the "install" recipe. This is due to the way deep merge handles arrays
-default['redisio']['servers'] = nil
+default['ddredisio']['servers'] = nil
 
 # Define binary path
-default['redisio']['bin_path'] = if node['redisio']['package_install']
+default['ddredisio']['bin_path'] = if node['ddredisio']['package_install']
                                    package_bin_path
                                  else
                                    '/usr/local/bin'

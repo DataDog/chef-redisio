@@ -1,4 +1,4 @@
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Attribute::default
 #
 # Copyright 2013, Rackspace Hosting <ryan.cleere@rackspace.com>
@@ -22,7 +22,7 @@ config_dir = if node['platform_family'] == 'freebsd'
                '/etc/redis'
              end
 
-default['redisio']['sentinel_defaults'] = {
+default['ddredisio']['sentinel_defaults'] = {
   'user'                    => 'redis',
   'configdir'               => config_dir,
   'sentinel_bind'           => nil,
@@ -48,6 +48,6 @@ default['redisio']['sentinel_defaults'] = {
 
 # Manage Sentinel Config File
 ## Will write out the base config one time then no longer manage the config allowing sentinel to take over
-default['redisio']['sentinel']['manage_config'] = true # Deprecated
+default['ddredisio']['sentinel']['manage_config'] = true # Deprecated
 
-default['redisio']['sentinels'] = nil
+default['ddredisio']['sentinels'] = nil

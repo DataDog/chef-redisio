@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Resource::install
 #
 # Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-module RedisioHelper
+module DDRedisioHelper
   def recipe_eval
     sub_run_context = @run_context.dup
     sub_run_context.resource_collection = Chef::ResourceCollection.new

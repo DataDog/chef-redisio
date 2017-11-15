@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: redisio
+# Cookbook Name:: ddredisio
 # Recipe:: configure
 #
 # Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
@@ -17,10 +17,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-include_recipe 'dd-redisio::default'
+include_recipe 'ddredisio::default'
 include_recipe 'ulimit::default'
 
-redis = node['redisio']
+redis = node['ddredisio']
 
 redis_instances = redis['servers']
 if redis_instances.nil?
@@ -31,7 +31,7 @@ if redis_instances.nil?
   ]
 end
 
-redisio_configure 'redis-servers' do
+ddredisio_configure 'redis-servers' do
   version redis['version'] if redis['version']
   default_settings redis['default_settings']
   servers redis_instances
@@ -42,7 +42,7 @@ end
 redis_instances.each do |current_server|
   server_name = current_server['name'] || current_server['port']
 
-  case node['redisio']['job_control']
+  case node['ddredisio']['job_control']
   when 'initd'
     service "redis#{server_name}" do
       # don't supply start/stop/restart commands, Chef::Provider::Service::*
@@ -72,4 +72,4 @@ redis_instances.each do |current_server|
   end
 end
 
-node.normal['redisio']['servers'] = redis_instances
+node.normal['ddredisio']['servers'] = redis_instances

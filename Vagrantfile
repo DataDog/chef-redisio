@@ -18,7 +18,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.berkshelf.berksfile_path = "./Berksfile"
   config.berkshelf.enabled = true
 
-  config.vm.define :redisio do |r|
+  config.vm.define :ddredisio do |r|
     r.vm.box     = base_box
     r.vm.box_url = url
     r.vm.network :private_network, :ip =>  "192.168.50.5"
@@ -28,10 +28,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     r.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = cookbooks_path
-      chef.add_recipe "dd-redisio::default"
-      chef.add_recipe "dd-redisio::enable"
+      chef.add_recipe "ddredisio::default"
+      chef.add_recipe "ddredisio::enable"
       chef.json = {
-        'redisio' => {
+        'ddredisio' => {
           'servers' => [
             {'port' => 6379}
           ]
@@ -50,12 +50,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     s.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = cookbooks_path
-      chef.add_recipe "dd-redisio::sentinel"
-      chef.add_recipe "dd-redisio::sentinel_enable"
+      chef.add_recipe "ddredisio::sentinel"
+      chef.add_recipe "ddredisio::sentinel_enable"
       chef.json = {
-        'redisio' => {
+        'ddredisio' => {
           'sentinels' => [
-            {'sentinel_bind' => '0.0.0.0', 'sentinel_port' => 26379, 'name' => 'redisio', 'master_ip' => '192.168.50.5', 'master_port' => '6379'}
+            {'sentinel_bind' => '0.0.0.0', 'sentinel_port' => 26379, 'name' => 'ddredisio', 'master_ip' => '192.168.50.5', 'master_port' => '6379'}
           ]
         }
       }
